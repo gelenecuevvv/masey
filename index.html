@@ -50,8 +50,82 @@
       .atmosphere {
         position: fixed;
         inset: 0;
+        overflow: hidden;
         pointer-events: none;
         z-index: 0;
+      }
+
+      .beam {
+        position: absolute;
+        left: 50%;
+        top: -8%;
+        width: min(46vw, 28rem);
+        height: 130vh;
+        transform: translateX(-50%) rotate(-6deg);
+        transform-origin: 50% 0;
+        background: linear-gradient(180deg, rgba(199, 199, 204, 0.2), rgba(199, 199, 204, 0.05) 46%, transparent 76%);
+        clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+        opacity: 0.7;
+        animation: sweep 18s ease-in-out infinite alternate;
+      }
+
+      @keyframes sweep {
+        from { transform: translateX(-50%) rotate(-9deg); }
+        to { transform: translateX(-50%) rotate(8deg); }
+      }
+
+      .fog {
+        position: absolute;
+        left: -15%;
+        width: 130%;
+        height: 24vh;
+        background: radial-gradient(ellipse at center, rgba(199, 199, 204, 0.14), transparent 68%);
+        animation: drift 32s ease-in-out infinite alternate;
+      }
+
+      .fog-a { bottom: 6%; }
+      .fog-b {
+        bottom: 16%;
+        height: 18vh;
+        opacity: 0.65;
+        animation-duration: 44s;
+        animation-direction: alternate-reverse;
+      }
+
+      @keyframes drift {
+        from { transform: translateX(-4%); }
+        to { transform: translateX(4%); }
+      }
+
+      .skyline {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 18vh;
+        min-height: 4.5rem;
+        max-height: 9rem;
+        opacity: 0.28;
+        color: var(--silver);
+      }
+
+      .mote {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        background: var(--silver);
+        opacity: 0.45;
+        animation: rise linear infinite;
+      }
+
+      @keyframes rise {
+        0% { transform: translate3d(0, 8vh, 0); opacity: 0; }
+        18% { opacity: 0.5; }
+        100% { transform: translate3d(var(--dx, 10px), -78vh, 0); opacity: 0; }
       }
 
       .grain {
@@ -97,6 +171,36 @@
       }
 
       .screen-envelope.is-leaving { opacity: 0; }
+
+      .screen-envelope::before,
+      .screen-candle::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .screen-envelope::before {
+        top: 48%;
+        width: min(36rem, 92vw);
+        height: min(36rem, 92vw);
+        background: radial-gradient(circle, rgba(199, 199, 204, 0.16), transparent 64%);
+      }
+
+      .screen-candle::before {
+        top: 42%;
+        width: min(30rem, 94vw);
+        height: min(28rem, 78vh);
+        background: radial-gradient(circle, rgba(232, 176, 96, 0.2), rgba(232, 176, 96, 0.05) 42%, transparent 68%);
+      }
+
+      .screen-envelope > *,
+      .screen-candle > * {
+        position: relative;
+        z-index: 1;
+      }
 
       .screen-envelope h1 { margin-bottom: 1.6rem; }
 
@@ -312,13 +416,8 @@
         overflow-wrap: break-word;
       }
 
-      .letter-message p { margin: 0 0 1rem; }
+      .letter-message p { margin: 0 0 1.15rem; }
       .letter-message p:last-child { margin-bottom: 0; }
-
-      .signoff {
-        margin-top: 1.5rem;
-        font-style: italic;
-      }
 
       .more-wrap {
         display: flex;
@@ -328,7 +427,6 @@
 
       /* Screen 3 */
       .screen-candle {
-        container-type: inline-size;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -340,23 +438,23 @@
       .screen-candle h1 { margin-bottom: 1.35rem; }
 
       .wish-stage {
-        --stage-font: min(16px, calc(100cqw / 19.4));
         position: relative;
-        width: 19.4em;
-        height: 13.6em;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 0.85rem;
+        width: min(100%, 24rem);
         margin: 0 auto 1.35rem;
-        font-size: var(--stage-font);
       }
 
       .masey-reveal {
-        position: absolute;
-        left: 1.45em;
-        bottom: 0;
+        position: relative;
+        flex: 0 0 auto;
         z-index: 1;
-        width: 9.35em;
+        width: 80px;
         pointer-events: none;
         opacity: 0;
-        transform: translateY(1em);
+        transform: translateY(12px);
       }
 
       .screen-candle.is-active .masey-reveal {
@@ -390,12 +488,11 @@
       }
 
       .cake-wrap {
-        position: absolute;
+        position: relative;
         z-index: 2;
-        right: 0;
-        bottom: 0;
-        width: 11em;
-        height: 11.5em;
+        flex: 0 0 auto;
+        width: 9.25rem;
+        height: 11.25rem;
         margin: 0;
       }
 
@@ -407,7 +504,7 @@
         height: 9.5em;
         transform: translate(-50%, -30%);
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(240, 196, 120, 0.42), rgba(240, 196, 120, 0.08) 46%, transparent 70%);
+        background: radial-gradient(circle, rgba(240, 196, 120, 0.55), rgba(232, 168, 84, 0.14) 46%, transparent 70%);
         transition: opacity 0.9s ease;
         pointer-events: none;
       }
@@ -543,6 +640,7 @@
 
       @media (min-width: 720px) {
         .letter-message { font-size: 1.125rem; }
+        .masey-reveal { width: 110px; }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -552,6 +650,14 @@
           transition-duration: 0.01ms !important;
         }
 
+        .beam,
+        .fog,
+        .mote {
+          animation: none !important;
+        }
+
+        .mote { opacity: 0.4; }
+
         .masey-reveal {
           opacity: 1 !important;
           transform: none !important;
@@ -560,7 +666,21 @@
     </style>
   </head>
   <body>
-    <div class="atmosphere" aria-hidden="true"><div class="grain"></div></div>
+    <div class="atmosphere" aria-hidden="true">
+      <div class="beam"></div>
+      <div class="fog fog-a"></div>
+      <div class="fog fog-b"></div>
+      <svg class="skyline" viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice">
+        <path fill="currentColor" d="M0 220V150h36v-28h18v28h28V118h14v-22h8v22h16v32h40V96h22V62h10v34h18v54h34V128h46v-40h12V64h9v24h11v40h20v44h48V102h16V74h8v28h18v46h52V90h24V48h11v42h20v42h36v38h44V110h15V78h8v32h17v32h40V124h58V86h12V52h10v34h16v38h28v48h70V132h18V98h9v34h22v36h46V108h20V70h8v38h16v32h34v40h80V140h22V104h10v36h26v40H1440V220H0Z" />
+      </svg>
+      <span class="mote" style="left:12%; bottom:22%; --dx:14px; animation-duration:26s; animation-delay:-6s"></span>
+      <span class="mote" style="left:28%; bottom:12%; --dx:-18px; animation-duration:34s; animation-delay:-14s"></span>
+      <span class="mote" style="left:47%; bottom:30%; --dx:10px; animation-duration:22s; animation-delay:-3s"></span>
+      <span class="mote" style="left:63%; bottom:16%; --dx:-12px; animation-duration:30s; animation-delay:-18s"></span>
+      <span class="mote" style="left:78%; bottom:26%; --dx:16px; animation-duration:28s; animation-delay:-9s"></span>
+      <span class="mote" style="left:90%; bottom:10%; --dx:-8px; animation-duration:36s; animation-delay:-21s"></span>
+      <div class="grain"></div>
+    </div>
 
     <audio id="birthdaySound" preload="none"></audio>
 
@@ -570,7 +690,7 @@
         <span class="env" aria-hidden="true">
           <span class="env-back"></span>
           <span class="mouth">
-            <span class="sheet"><span class="sheet-title">Happy birthday, baby.</span></span>
+            <span class="sheet"><span class="sheet-title">Happy birthday, my maseybear!</span></span>
           </span>
           <span class="pocket"></span>
           <span class="edge"></span>
@@ -591,45 +711,12 @@
 
     <section class="screen screen-letter" id="screenLetter" aria-labelledby="letterHeading" hidden>
       <article class="paper">
-        <h1 id="letterHeading" tabindex="-1">Happy birthday, baby.</h1>
-        <!--
-          EDIT YOUR LETTER
-          Change the paragraphs inside #letterMessage.
-          Keep each paragraph in its own <p>.
-        -->
+        <h1 id="letterHeading" tabindex="-1">Happy birthday, my maseybear!</h1>
         <div class="letter-message" id="letterMessage">
-          <p>
-            Even though it’s only been a month and we’re not
-            officially in a relationship yet, the connection we share feels
-            really genuine to me. I deeply appreciate you—like the way you
-            talk to me, the way you listen, and how genuine your intentions
-            are.
-          </p>
-          <p>
-            Being able to talk to you has become one of my favourite parts of
-            my days, and lately I’ve noticed myself falling for you more and
-            more every day. I appreciate you for making this past month
-            something I’ll always cherish, and I’m really grateful for you.
-          </p>
-          <p>
-            I hope I’m able to make you feel the same way, because you’re
-            really special to me too, and my intentions towards you are just
-            as genuine.
-          </p>
-          <p>
-            No matter what happens, no matter where life takes us, you will always have me. In the good days, in the hard days, in the moments you feel strong and in the moments you feel tired—I’m here. I choose you, and I will continue to show up for you as long as I’m breathing.
-          </p>
-          <p>I love you with all my heart, always. My pookie bear 🤍</p>
-          <p class="signoff">
-            Love,<br />
-            Christa
-          </p>
-          <p>
-            ps: I actually made this myself and coded it myself, but I
-            honestly didn’t know how to deploy it properly, so I asked
-            Angelene to help me with that part. Everything else was done with
-            love and I really hope you love it.
-          </p>
+          <p>You make me genuinely happy in so many ways hehe. I’m so grateful to have you in my life, and I’m honestly so glad we somehow found our way back to each other. I’ll never regret giving us a shot duh</p>
+          <p>I hope you know how much I value u and what we have. You’ve become such a special part of my life and I really wanna keep you for a looong time hehe. I wouldn’t trade what we have for anything doe</p>
+          <p>I wish more than anything that I could be there with you today (and give u head??) Though it’s not my birthday, I’d still blow your candle hahaha</p>
+          <p>You deserve so much love and ME my love. I can’t wait to get rich (legally or illegally idm) and spoil u hehe I love you so much, maneega</p>
         </div>
       </article>
       <div class="more-wrap">
@@ -664,12 +751,7 @@
         <!-- EDIT THE LINE SHOWN AFTER THE CANDLE GOES OUT -->
         <p class="wish" id="wishText" tabindex="-1" hidden>I love you. Happy birthday 🖤</p>
         <button class="quiet-btn" id="relightBtn" type="button" hidden>Light it again</button>
-        <div class="sound-row">
-          <button class="quiet-btn" id="muteBtn" type="button" hidden aria-pressed="false">Mute</button>
-          <button class="quiet-btn" id="replayBtn" type="button" hidden>Replay</button>
-          <button class="quiet-btn" id="playSoundBtn" type="button" hidden>Play birthday sound</button>
-        </div>
-        <button class="quiet-btn" id="backBtn" type="button">Read my letter again</button>
+        <button class="quiet-btn" id="playSoundBtn" type="button" hidden>Play birthday sound</button>
       </div>
     </section>
 
@@ -691,9 +773,6 @@
       const blowBtn = document.getElementById("blowBtn");
       const wishText = document.getElementById("wishText");
       const relightBtn = document.getElementById("relightBtn");
-      const backBtn = document.getElementById("backBtn");
-      const muteBtn = document.getElementById("muteBtn");
-      const replayBtn = document.getElementById("replayBtn");
       const playSoundBtn = document.getElementById("playSoundBtn");
       const birthdaySound = document.getElementById("birthdaySound");
 
@@ -715,7 +794,6 @@
       let candleLit = true;
       let blowTimer = 0;
       let audioMissing = false;
-      let muted = false;
       let soundToken = 0;
 
       birthdaySound.src = BIRTHDAY_SOUND;
@@ -787,58 +865,29 @@
         blowBtn.disabled = false;
       }
 
-      function hideSoundControls() {
-        muteBtn.hidden = true;
-        replayBtn.hidden = true;
-        playSoundBtn.hidden = true;
-      }
-
-      function syncMute() {
-        muteBtn.setAttribute("aria-pressed", muted ? "true" : "false");
-        muteBtn.textContent = muted ? "Unmute" : "Mute";
-        muteBtn.setAttribute("aria-label", muted ? "Unmute birthday sound" : "Mute birthday sound");
-      }
-
       function pauseOtherAudio() {
         document.querySelectorAll("audio").forEach((el) => {
           if (el !== birthdaySound) el.pause();
         });
       }
 
-      function stopBirthdaySound() {
-        soundToken += 1;
-        birthdaySound.pause();
-        try { birthdaySound.currentTime = 0; } catch { /* not seekable yet */ }
-        muted = false;
-        birthdaySound.muted = false;
-        syncMute();
-        hideSoundControls();
-      }
-
       function startBirthdaySound() {
         if (audioMissing) return;
         pauseOtherAudio();
         const token = ++soundToken;
-        muted = false;
         birthdaySound.muted = false;
         birthdaySound.loop = false;
-        syncMute();
-        hideSoundControls();
+        playSoundBtn.hidden = true;
         try { birthdaySound.currentTime = 0; } catch { /* ignore */ }
 
         const pending = birthdaySound.play();
         if (!pending) return;
         pending.then(() => {
           if (token !== soundToken || audioMissing || current !== "candle") return;
-          muteBtn.hidden = false;
-          replayBtn.hidden = true;
           playSoundBtn.hidden = true;
         }).catch((error) => {
           if (token !== soundToken || audioMissing || current !== "candle") return;
-          if (error && error.name === "NotAllowedError") {
-            playSoundBtn.hidden = false;
-            muteBtn.hidden = true;
-          }
+          if (error && error.name === "NotAllowedError") playSoundBtn.hidden = false;
         });
       }
 
@@ -883,71 +932,27 @@
         focusWhenReady(blowBtn);
       }
 
-      function returnToLetter() {
-        if (current !== "candle") return;
-        stopBirthdaySound();
-        resetCandle();
-        showScreen("letter");
-        focusWhenReady(letterHeading);
-      }
-
       envelopeBtn.addEventListener("click", openEnvelope);
       openBtn.addEventListener("click", openEnvelope);
       moreBtn.addEventListener("click", openCandle);
       blowBtn.addEventListener("click", blowCandle);
       relightBtn.addEventListener("click", relightCandle);
-      backBtn.addEventListener("click", returnToLetter);
-
-      muteBtn.addEventListener("click", () => {
-        if (audioMissing || birthdaySound.paused) return;
-        muted = !muted;
-        birthdaySound.muted = muted;
-        syncMute();
-      });
-
-      replayBtn.addEventListener("click", () => {
-        if (audioMissing || current !== "candle") return;
-        replayBtn.hidden = true;
-        try { birthdaySound.currentTime = 0; } catch { /* ignore */ }
-        birthdaySound.muted = muted;
-        const pending = birthdaySound.play();
-        if (!pending) return;
-        pending.then(() => {
-          if (current !== "candle" || audioMissing) return;
-          muteBtn.hidden = false;
-          playSoundBtn.hidden = true;
-        }).catch((error) => {
-          if (error && error.name === "NotAllowedError") playSoundBtn.hidden = false;
-        });
-      });
 
       playSoundBtn.addEventListener("click", () => {
         if (audioMissing || current !== "candle") return;
-        muted = false;
-        birthdaySound.muted = false;
-        syncMute();
         const pending = birthdaySound.play();
         if (!pending) return;
         pending.then(() => {
           if (current !== "candle" || audioMissing) return;
           playSoundBtn.hidden = true;
-          muteBtn.hidden = false;
-          replayBtn.hidden = true;
         }).catch(() => {
           playSoundBtn.hidden = false;
         });
       });
 
-      birthdaySound.addEventListener("ended", () => {
-        if (audioMissing || current !== "candle") return;
-        muteBtn.hidden = true;
-        playSoundBtn.hidden = true;
-        replayBtn.hidden = false;
-      });
-
       birthdaySound.addEventListener("error", () => {
         audioMissing = true;
-        hideSoundControls();
+        playSoundBtn.hidden = true;
       });
 
       screenLetter.inert = true;
