@@ -854,7 +854,7 @@
       let soundToken = 0;
 
       birthdaySound.src = BIRTHDAY_SOUND;
-      birthdaySound.loop = false;
+      birthdaySound.loop = true;
       birthdaySound.preload = "none";
 
       function later(fn, ms) {
@@ -933,7 +933,7 @@
         pauseOtherAudio();
         const token = ++soundToken;
         birthdaySound.muted = false;
-        birthdaySound.loop = false;
+        birthdaySound.loop = true;
         playSoundBtn.hidden = true;
         try { birthdaySound.currentTime = 0; } catch { /* ignore */ }
 
